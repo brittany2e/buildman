@@ -1,0 +1,188 @@
+<-- Based off 2048 game made by Sam Herbert 2014 -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+			body {
+				background: #FFFFFF;
+			}
+			#titleBox {
+				position: relative;
+				margin-left: auto;
+				margin-right: auto;
+				background: #FFFFFF;
+				border-top: 2px solid darkgray;
+				border-left: 2px solid darkgray;
+				border-right: 2px solid darkgray;
+				width: 600px;
+				height: 150px;
+			}
+
+			#styleBox1 {
+				position: absolute;
+				top: 10px;
+				left: -15px;
+				background: Yellow;
+				//opacity: 0.8;
+				padding: 2px;
+				width: 300px;
+				height: 80px;
+			}
+
+			#styleBox2 {
+				position: absolute;
+				top: 11px;
+				left: 17px;
+				background: lime;
+				//opacity: 0.5;
+				padding: 2px;
+				width: 136px;
+				height: 59px;
+			}
+
+			#textBox1 {
+				position: absolute;
+				top: 5px;
+				left: 25px;
+				font-weight: bold;
+				letter-spacing: 12px;
+				padding: 2px;
+				//text-shadow: 5px 5px 5px #000000;
+			}
+
+			#instructions {
+				position: absolute;
+				top: 90px;
+				left: 25px;
+				padding: 2px;
+			}
+			
+			#bodyBox {
+				position: relative;
+				margin-left: auto;
+				margin-right: auto;
+				background: #FFFFFF;
+				top: 150px;
+				left: -2px;
+				border-left: 2px solid darkgray;
+				border-right: 2px solid darkgray;
+				border-bottom: 2px solid darkgray;
+				width: 600px;
+				height: 575px;
+			}
+			
+			#game {
+				position: absolute;
+				top: 3px;
+				left: 27px;
+				height: 550px;
+				width: 550px;
+			}
+			
+        </style>
+
+      	<script type="text/javascript" src="buildmanForHTML.js" ></script>
+    </head>
+	<body>
+		<!-- 
+			visible elements 
+		-->
+        <div id="titleBox">
+            <div id="styleBox1">
+                <div id="styleBox2"/>
+            </div>
+			<h1 id="textBox1">Buildman</h1>
+		</div>
+		<h3 id="instructions">Welcome to the buildman game! Guess a letter.</h3>
+		<div id="bodyBox">
+			<canvas id="game" width=1100 height=1100>
+				This browser does not appear to support the canvas object.
+			</canvas>
+		</div>
+
+	
+		<!-- 
+			Twenty-Forty-Eight Game Code:
+				To launch the game from a button or other HTML element move the call to TwentyFourtyEight() inside the  
+				quotes on that elements onClick="" or onLoad="" property 
+		-->
+		<script>
+
+			buildman('game');
+
+			function buildman(canvasId) {
+				var canvas = initCanvas(canvasId);
+
+				var phrase = introduction();
+
+				draw(phrase, canvas);
+
+			    document.onkeydown = function(event) {
+			    	var input = event.key;
+			        if(input.match(/[a-z]/i)) {
+			            phrase = guessALetter(input);
+			            //printPuzzleInProgress();
+			        }
+
+			        draw(phrase, canvas);
+			        if(isFinished()) {
+			            done();
+			     	}
+			    };
+			}
+
+			function initCanvas(canvasId){
+				var canvas = document.getElementById(canvasId);
+				var context = canvas.getContext('2d');
+				
+				context.font="15px Arial"
+				context.textAlign = "center";
+				context.textBaseline = "middle"
+				
+				return canvas;
+			}
+
+			function draw(phrase, canvas){
+				var context = canvas.getContext('2d');
+				
+				context.lineWidth = 1;
+				
+				var numOfLetters = phrase.length;
+				var cellWidth = Math.floor((canvas.width - 1) / numOfLetters);
+				var cellHeight = Math.floor((canvas.height - 1) / 4);
+				var cellHalfWidth = Math.floor(cellWidth / 2);
+				var cellHalfHeight = Math.floor(cellHeight / 2);
+
+				//context.fillStyle = "gray";
+				//context.fillRect(0, 0, cellWidth * 4 + 1, cellHeight * 4 + 1);
+				context.font="80px Verdana";
+
+				for(var i = 0; i < numOfLetters; i++)
+				{
+					var x1 = i * cellWidth
+					var y1 = cellHeight;
+					var val = phrase[i];
+
+					context.fillStyle = "Lime";
+					if(val === " ") 
+						context.fillStyle = "White";
+					if(val === "-")
+						context.fillStyle = "Yellow";
+
+					context.fillRect(1 + x1, 1 + y1, cellWidth - 1, cellHeight - 1);
+					//context.fillStyle = "black";
+					if(val.match(/[a-z]/i))
+						context.fillStyle = "black";
+						context.fillText(val, x1 + cellHalfWidth, y1 + cellHalfHeight);
+					
+				}
+			}
+
+			function done() {
+				alert('Thank you for playing!');
+			}
+
+		</script>
+	</body>
+</html>
