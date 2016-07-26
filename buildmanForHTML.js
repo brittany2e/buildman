@@ -1,4 +1,4 @@
-var secretPhrase = "This is a secret phrase";
+var secretPhrase = "Let us try another";
 var inProgressPhrase = secretPhrase.split(/[a-z]/i).join('-');
 
 
